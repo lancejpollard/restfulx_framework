@@ -69,6 +69,8 @@ package org.restfulx.serializers {
           } else {
             return unmarshallJSONObject(source, target, disconnected);
           }
+        } else {
+        	return unmarshallJSONObject(object, target, disconnected);
         }
       } catch (e:Error) {
         throw new Error("could not unmarshall provided object");
