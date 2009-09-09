@@ -55,7 +55,7 @@ package org.restfulx.serializers {
     /**
      *  @inheritDoc
      */
-    public override function unmarshall(object:Object, disconnected:Boolean = false):Object {
+    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
       if (object is TypedArray || object is RxModel) {
         return object;
       }
@@ -65,9 +65,9 @@ package org.restfulx.serializers {
         } else if (object is String) {
           var source:Object = JSON.decode(object as String);
           if (source is Array) {
-            return unmarshallJSONArray(source as Array, disconnected);
+            return unmarshallJSONArray(source as Array, target, disconnected);
           } else {
-            return unmarshallJSONObject(source, disconnected);
+            return unmarshallJSONObject(source, target, disconnected);
           }
         }
       } catch (e:Error) {
@@ -77,19 +77,19 @@ package org.restfulx.serializers {
     }
     
     // can digest both ActiveRecord-like JSON and CouchDB-like JSON
-    private function unmarshallJSONArray(instances:Array, disconnected:Boolean = false):Array {
+    private function unmarshallJSONArray(instances:Array, target:Object = null, disconnected:Boolean = false):Array {
       if (!instances || !instances.length) return instances;
       
       var result:TypedArray = new TypedArray;
       for each (var instance:Object in instances) {
-        result.push(unmarshallJSONObject(instance, disconnected));
+        result.push(unmarshallJSONObject(instance, target, disconnected));
       }
       
       result.itemType = getQualifiedClassName(result[0]);
       return result;
     }
     
-    private function unmarshallJSONObject(source:Object, disconnected:Boolean = false):Object {
+    private function unmarshallJSONObject(source:Object, target:Object = null, disconnected:Boolean = false):Object {
       if (!source.hasOwnProperty("id") && !source.hasOwnProperty("_id")) {
         // ActiveRecord-like JSON array with element names as object keys
         for (var prop:String in source) {
@@ -103,7 +103,7 @@ package org.restfulx.serializers {
         convertProperties(source);
       }
       
-      return super.unmarshall(source, disconnected);
+      return super.unmarshall(source, target, disconnected);
     }
     
     private function convertProperties(instance:Object):Object {

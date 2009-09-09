@@ -348,7 +348,7 @@ package org.restfulx.components.rx {
         showDropdown = true;
       } else if (dropdown) {
         if (typedTextChanged) {
-          cursorPosition = textInput.selectionBeginIndex;
+   //       cursorPosition = textInput.selectionBeginIndex;
     
           if (ArrayCollection(dataProvider).length) {
             if (!itemPreselected && !itemShown) { 
@@ -388,12 +388,12 @@ package org.restfulx.components.rx {
           //This is needed because a call to super.updateDisplayList() iset the text
           // in the textInput to "" and the value typed by the user gets losts
           textInput.text = _typedText;
-          textInput.setSelection(cursorPosition, cursorPosition);
+  //        textInput.setSelection(cursorPosition, cursorPosition);
           typedTextChanged = false;
         } else if (typedText) {
           //Sets the selection when user navigates the suggestion list through
           //arrows keys.
-          textInput.setSelection(_typedText.length, textInput.text.length);
+  //        textInput.setSelection(_typedText.length, textInput.text.length);
         }
         
         if (clearingText) clearingText = false;
@@ -420,11 +420,11 @@ package org.restfulx.components.rx {
         // field to original text
         if (event.keyCode == Keyboard.UP && prevIndex == 0) {
           textInput.text = _typedText;
-          textInput.setSelection(textInput.text.length, textInput.text.length);
+  //        textInput.setSelection(textInput.text.length, textInput.text.length);
           selectedIndex = -1; 
         } else if (event.keyCode == Keyboard.ESCAPE && showingDropdown) {
           textInput.text = _typedText;
-          textInput.setSelection(textInput.text.length, textInput.text.length);
+   //       textInput.setSelection(textInput.text.length, textInput.text.length);
           showingDropdown = false;
           dropdownClosed = true;
         } else if (event.keyCode == Keyboard.ENTER || event.keyCode == Keyboard.TAB) {
@@ -478,7 +478,7 @@ package org.restfulx.components.rx {
       super.close(event);
       if (selectedIndex == 0) {
         textInput.text = selectedLabel;
-        textInput.setSelection(cursorPosition, textInput.text.length);
+  //      textInput.setSelection(cursorPosition, textInput.text.length);
       }      
     } 
   }

@@ -132,8 +132,8 @@ package org.restfulx.services.http {
      * @inheritDoc
      * @see org.restfulx.services.IServiceProvider#unmarshall
      */
-    public function unmarshall(object:Object, disconnected:Boolean = false):Object {
-      return serializer.unmarshall(object, disconnected);
+    public function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
+      return serializer.unmarshall(object, target, disconnected);
     }
     
     /**
@@ -301,7 +301,7 @@ package org.restfulx.services.http {
             var cached:Object = RxUtils.clone(ModelsCollection(Rx.models.cache.data[fqn]).withId(object["id"]));
           }
           
-          var response:Object = unmarshall(result);
+          var response:Object = unmarshall(result, object);
           
           if (Rx.enableUndoRedo && undoRedoFlag != Rx.undoredo.UNDO) {
             var target:Object;
@@ -430,7 +430,7 @@ package org.restfulx.services.http {
             var cached:Object = RxUtils.clone(ModelsCollection(Rx.models.cache.data[fqn]).withId(object["id"]));
           }
           
-          var response:Object = unmarshall(result);
+          var response:Object = unmarshall(result, object);
           
           if (Rx.enableUndoRedo && undoRedoFlag != Rx.undoredo.UNDO) {
             var target:Object;

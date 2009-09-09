@@ -47,7 +47,7 @@ package org.restfulx.serializers {
     /**
      *  @inheritDoc
      */
-    public override function unmarshall(object:Object, disconnected:Boolean = false):Object {
+    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
       if (object is TypedArray || object is RxModel) {
         return object;
       }
@@ -56,7 +56,7 @@ package org.restfulx.serializers {
           return unmarshallArray(object as Array, disconnected);
         } else {
           var fqn:String = state.fqns[object["clazz"]];
-          return unmarshallObject(object, disconnected, fqn);
+          return unmarshallObject(object, target, disconnected, fqn);
         }
       } catch (e:Error) {
         throw new Error("could not unmarshall provided object:" + e.getStackTrace());
@@ -77,7 +77,7 @@ package org.restfulx.serializers {
       return results;
     }
     
-    protected override function unmarshallObject(source:Object, disconnected:Boolean = false, type:String = null):Object {
+    protected override function unmarshallObject(source:Object, target:Object = null, disconnected:Boolean = false, type:String = null):Object {
       var fqn:String = type;
       var objectId:String = source["id"];
       var updatingExistingReference:Boolean = false;
@@ -89,7 +89,11 @@ package org.restfulx.serializers {
       var object:Object = ModelsCollection(Rx.models.cache.data[fqn]).withId(objectId);
       
       if (object == null) {
-        object = initializeModel(objectId, fqn, disconnected);
+      	if (target == null) {
+	        object = initializeModel(objectId, fqn, disconnected);
+	    } else {
+	    	object = target;
+	    }
       } else {
         updatingExistingReference = true; 
       }
@@ -101,7 +105,9 @@ package org.restfulx.serializers {
         var camelTargetName:String = RxUtils.toCamelCase(targetName);
         var defaultValue:* = null;
         if (targetName.search(/.*_id$/) == -1 && source[property] != null) {
-          var targetType:String = getType(XMLList(metadata..accessor.(@name == camelTargetName))[0]).toLowerCase();
+          var targetType:String = getType(XMLList(metadata.factory.accessor.(@name == camelTargetName))[0]).toLowerCase();
+          if (targetType == "string")
+          	targetType = getType(XMLList(metadata..accessor.(@name == camelTargetName))[0]).toLowerCase();
           defaultValue = RxUtils.cast(targetType, source[property]);
         }
         unmarshallAttribute(source, object, source[property], fqn, targetName, defaultValue, 

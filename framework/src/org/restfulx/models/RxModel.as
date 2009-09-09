@@ -54,6 +54,10 @@ package org.restfulx.models {
 
     /** any model can have one attachment, this can be either RxFileRefrence or BinaryAttachment */
     public var attachment:Object;
+	
+	[Ignored]
+	/** a unique identifier to tell you if you are part of a chain of processing items **/
+	public var _processId_:String;
 
     /**
      * @param label default model property to use when doing toString().

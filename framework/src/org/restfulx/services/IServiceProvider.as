@@ -79,10 +79,11 @@ package org.restfulx.services {
      * an object graph of models.
      *  
      * @param object source object from the service provider/responder
+     * @param target target object you want to parse your source into
      * @param disconnected a flag indicating that the object should not be reconnected with the cache
      * @return (dis)connected object graph of the model corresponding to the response
      */
-    function unmarshall(object:Object, disconnected:Boolean = false):Object;
+    function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object;
 
     /**
      * RESTful CRUD contract: index method. Same semantics as Rails RESTful controller index.

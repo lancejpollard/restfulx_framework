@@ -70,11 +70,11 @@ package org.restfulx.serializers {
      *   
      * @see org.restfulx.serializers.ISerializer#unmarshall
      */
-    public function unmarshall(object:Object, disconnected:Boolean = false):Object {
+    public function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
       return object;
     }
 
-    protected function unmarshallObject(source:Object, disconnected:Boolean = false, type:String = null):Object {
+    protected function unmarshallObject(source:Object, target:Object = null, disconnected:Boolean = false, type:String = null):Object {
       return source;
     }
 
@@ -281,6 +281,8 @@ package org.restfulx.serializers {
         return types["String"];
       } else if (RxUtils.isDateTime(node)) {
         return types["DateTime"];
+      } else if (type == "Array") {
+      	return type;
       } else {
         return (result == null) ? types["String"] : result; 
       }

@@ -50,6 +50,6 @@ package org.restfulx.serializers {
      * @param object source object from the service provider/responder
      * @return connected object graph of the model corresponding to the response
      */
-     function unmarshall(object:Object, disconnected:Boolean = false):Object;    
+     function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object;    
   }
 }

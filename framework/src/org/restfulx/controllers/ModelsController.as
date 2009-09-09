@@ -628,6 +628,37 @@ package org.restfulx.controllers {
       }
     }
 
+    /**
+     * Sizes model cache to the appropriate size, without having to reprocess the things
+     *	you still want in the cache.
+     * 
+     * @param object can be a model class or specific model instance
+     *    if null, prune everything by as much as you can
+     */
+    public function prune(object:Object, optsOrAmount:Object = null,
+      byAmount:int = 0, totalAmount:int = 0, startIndex:int = 0, endIndex:int = 0):void {
+      var array:Array = cache.data[state.types[object]].toArray();
+      if (array == null || array.length == 0) return;
+      if (optsOrAmount) {
+        if (optsOrAmount.hasOwnProperty("startIndex")) startIndex = optsOrAmount["startIndex"];
+        if (optsOrAmount.hasOwnProperty("endIndex")) {
+          endIndex = optsOrAmount["endIndex"];
+        } else if (optsOrAmount.hasOwnProperty("byAmount")) {
+          endIndex = array.length - byAmount - 1;
+        } else if (optsOrAmount.hasOwnProperty("totalAmount")) {
+          endIndex = startIndex + totalAmount;
+        }
+      } else {
+				endIndex = array.length - 1;
+			}
+			if (array.length - 1 < endIndex) {
+      	array = array.slice(startIndex, endIndex);
+			}
+      if (object is Class) {
+        cache.data[state.types[object]] = new ModelsCollection(array);
+      }
+    }
+
     private function getServiceProvider(serviceId:int = -1):IServiceProvider {
       if (serviceId == -1) serviceId = Rx.defaultServiceId;
       return IServiceProvider(Rx.services.getServiceProvider(serviceId));

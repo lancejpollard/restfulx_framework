@@ -120,8 +120,8 @@ package org.restfulx.services.webkit {
       return Rx.serializers.vo.marshall(object, recursive);
     }
 
-    public function unmarshall(object:Object, disconnected:Boolean = false):Object {
-      return Rx.serializers.vo.unmarshall(object, disconnected);
+    public function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
+      return Rx.serializers.vo.unmarshall(object, target, disconnected);
     }
     
     public function index(clazz:Object, responder:IResponder, metadata:Object = null, nestedBy:Array = null):void {

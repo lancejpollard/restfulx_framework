@@ -47,7 +47,7 @@ package org.restfulx.serializers {
     /**
      *  @inheritDoc
      */
-    public override function unmarshall(object:Object, disconnected:Boolean = false):Object {
+    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
       if (object is TypedArray || object is RxModel) {
         return object;
       }
@@ -81,7 +81,7 @@ package org.restfulx.serializers {
       return object;
     }
 
-    protected override function unmarshallObject(source:Object, disconnected:Boolean = false, type:String = null):Object {
+    protected override function unmarshallObject(source:Object, target:Object = null, disconnected:Boolean = false, type:String = null):Object {
       var node:XML = XML(source);
       var localName:String = RxUtils.lowerCaseFirst(node.@kind);
       if (RxUtils.isEmpty(localName)) return null;
@@ -96,7 +96,11 @@ package org.restfulx.serializers {
       var object:Object = ModelsCollection(Rx.models.cache.data[fqn]).withId(nodeId);
       
       if (object == null) {
-        object = initializeModel(nodeId, fqn, disconnected);
+      	if (target == null) {
+	        object = initializeModel(nodeId, fqn, disconnected);
+	    } else {
+	    	object = target;
+	    }
       } else {
         updatingExistingReference = true;
       }

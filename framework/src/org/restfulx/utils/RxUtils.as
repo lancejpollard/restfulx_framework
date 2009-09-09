@@ -451,7 +451,11 @@ package org.restfulx.utils {
     public static function cast(targetType:String, value:Object):* {
       if (value == null || !(value is String)) return value;
       
-      if (targetType == "boolean") {
+      if (targetType == "array") {
+      	if (value is String)
+      		return (value == "") ? null : [value];
+      	return value;
+      } else if (targetType == "boolean") {
         value = String(value).toLowerCase();
         return (value == "true" || value == 1) ? true : false;
       } else if (targetType == "date") {

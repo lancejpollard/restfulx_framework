@@ -24,10 +24,8 @@
 package org.restfulx.services.http {
   import mx.rpc.http.HTTPService;
   
-  import org.restfulx.Rx;
   import org.restfulx.controllers.ServicesController;
   import org.restfulx.serializers.JSONSerializer;
-  import org.restfulx.utils.RxUtils;
 
   /**
    * JSON-over-HTTP service provider based on Flex HTTPService.
@@ -84,8 +82,8 @@ package org.restfulx.services.http {
      * @inheritDoc
      * @see org.restfulx.services.IServiceProvider#unmarshall
      */
-    public override function unmarshall(object:Object, disconnected:Boolean = false):Object {      
-      return serializer.unmarshall(object, disconnected);
+    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {      
+      return serializer.unmarshall(object, target, disconnected);
     }
 
     protected override function getHTTPService(object:Object, nestedBy:Array = null):HTTPService {

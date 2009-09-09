@@ -118,8 +118,8 @@ package org.restfulx.services.as3http {
      * @inheritDoc
      * @see org.restfulx.services.IServiceProvider#unmarshall
      */
-    public function unmarshall(object:Object, disconnected:Boolean = false):Object {
-      return serializer.unmarshall(object, disconnected);
+    public function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
+      return serializer.unmarshall(object, target, disconnected);
     }
 
     /**
