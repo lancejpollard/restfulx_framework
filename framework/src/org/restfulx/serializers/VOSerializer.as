@@ -89,11 +89,7 @@ package org.restfulx.serializers {
       var object:Object = ModelsCollection(Rx.models.cache.data[fqn]).withId(objectId);
       
       if (object == null) {
-      	if (target == null) {
-	        object = initializeModel(objectId, fqn, disconnected);
-	    } else {
-	    	object = target;
-	    }
+      	object = initializeModel(objectId, fqn, target, disconnected);
       } else {
         updatingExistingReference = true; 
       }
