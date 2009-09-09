@@ -184,7 +184,7 @@ package org.restfulx.serializers {
     protected override function processNestedArray(array:Object, type:String, disconnected:Boolean = false):ModelsCollection {
       var result:ModelsCollection = new ModelsCollection;
       for each (var nestedObject:Object in array) {
-        result.addItem(unmarshallObject(nestedObject, disconnected, type));
+        result.addItem(unmarshallObject(nestedObject, null, disconnected, type));
       }
       return result;
     }

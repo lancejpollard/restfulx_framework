@@ -265,8 +265,8 @@ package org.restfulx.serializers {
       return allConditionsMet;
     }
 
-    protected function initializeModel(id:String, fqn:String, disconnected:Boolean = false):Object {
-      var model:Object = new (getDefinitionByName(fqn) as Class);
+    protected function initializeModel(id:String, fqn:String, model:Object = null, disconnected:Boolean = false):Object {
+      model ||= new (getDefinitionByName(fqn) as Class);
       model["id"] = id;
       if (!disconnected) RxUtils.addModelToCache(model, fqn);
       return model;
