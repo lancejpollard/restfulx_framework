@@ -73,7 +73,7 @@ package org.restfulx.serializers {
         	return unmarshallJSONObject(object, target, disconnected);
         }
       } catch (e:Error) {
-        throw new Error("could not unmarshall provided object");
+        throw new Error("could not unmarshall provided object: " + e.getStackTrace());
       }
       return null;    
     }
@@ -109,8 +109,12 @@ package org.restfulx.serializers {
     }
     
     private function convertProperties(instance:Object):Object {
-      for each (var prop:Object in [{"_id" : "id"}, {"etag" : "id"}, {"_rev" : "rev"}, {"ruby_class" : "clazz"},
-        {"couchrest-type" : "clazz"}]) {
+		var items:Array = [{"_id" : "id"},
+		{"etag" : "id"},
+		{"_rev" : "rev"},
+		{"ruby_class" : "clazz"},
+        {"couchrest-type" : "clazz"}];
+      for each (var prop:Object in items) {
         for (var key:String in prop) {
           if (instance.hasOwnProperty(key)) {
             var target:String = prop[key];
