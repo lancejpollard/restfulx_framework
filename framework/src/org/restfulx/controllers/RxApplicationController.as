@@ -77,9 +77,9 @@ package org.restfulx.controllers {
      *  
      * @param commands the array of command classes to register e.g. [Command1, Command2]
      * @param models the array of model classes to register e.g. [Model1, Model2]
-     * @param extraServices the array of services to use (HTTPServiceProvider is registered
+     * @param extraServices the array of services to use (XMLHTTPServiceProvider is registered
      *  by default. All other providers (e.g. AIR) must be registered here)
-     * @param targetServiceId default service to use for operations (by default HTTPServiceProvider.ID)
+     * @param targetServiceId default service to use for operations (by default XMLHTTPServiceProvider.ID)
      */
     public function RxApplicationController(commands:Array, models:Array, 
       extraServices:Array = null, targetServiceId:int = -1) {
@@ -90,15 +90,13 @@ package org.restfulx.controllers {
       // The order is important. ModelsController must be initialized before ServicesController
       // and UndoRedo controller
       
-      // set up models controller
+      // set up models controller and other services
       Rx.models = new ModelsController(models);
 
       Rx.undoredo = new UndoRedoController;
       
       Rx.serializers = new SerializersController;
       
-      Rx.titanium = new TitaniumController;
-
       // set up services
       if (extraServices == null) extraServices = new Array;
       Rx.services = new ServicesController(extraServices, targetServiceId);

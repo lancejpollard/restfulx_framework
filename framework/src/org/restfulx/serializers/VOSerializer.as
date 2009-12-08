@@ -47,16 +47,19 @@ package org.restfulx.serializers {
     /**
      *  @inheritDoc
      */
-    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
-      if (object is TypedArray || object is RxModel) {
+    public override function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object {
+      if (object is RxModel || object is TypedArray) {
         return object;
       }
       try {
         if (object is Array) {
-          return unmarshallArray(object as Array, disconnected);
+          return unmarshallArray(object as Array, disconnected, defaultType);
         } else {
-          var fqn:String = state.fqns[object["clazz"]];
-          return unmarshallObject(object, target, disconnected, fqn);
+          var fqn:String = defaultType;
+          if (object.hasOwnProperty("clazz")) {
+            fqn = state.fqns[object["clazz"]];
+          }
+          return unmarshallObject(object, disconnected, fqn, target);
         }
       } catch (e:Error) {
         throw new Error("could not unmarshall provided object:" + e.getStackTrace());
@@ -64,20 +67,26 @@ package org.restfulx.serializers {
       return null;
     }
     
-    protected function unmarshallArray(instances:Array, disconnected:Boolean = false):Array {
+    protected function unmarshallArray(instances:Array, disconnected:Boolean = false, defaultType:String = null):Array {
       if (!instances || !instances.length) return instances;
       
       var results:TypedArray = new TypedArray;
-      var fqn:String = state.fqns[instances[0]["clazz"]];
-        
+      var fqn:String = defaultType;
+      if (instances[0].hasOwnProperty("clazz")) {
+        fqn = state.fqns[instances[0]["clazz"]];
+      }
       results.itemType = fqn;
       for each (var instance:Object in instances) {
-        results.push(unmarshallObject(instance, disconnected, fqn));
+        if (instance is RxModel) {
+          results.push(instance);
+        } else {
+          results.push(unmarshallObject(instance, disconnected, fqn));
+        }
       }
       return results;
     }
     
-    protected override function unmarshallObject(source:Object, target:Object = null, disconnected:Boolean = false, type:String = null):Object {
+    protected override function unmarshallObject(source:Object, disconnected:Boolean = false, type:String = null, target:Object = null):Object {
       var fqn:String = type;
       var objectId:String = source["id"];
       var updatingExistingReference:Boolean = false;
@@ -184,7 +193,7 @@ package org.restfulx.serializers {
     protected override function processNestedArray(array:Object, type:String, disconnected:Boolean = false):ModelsCollection {
       var result:ModelsCollection = new ModelsCollection;
       for each (var nestedObject:Object in array) {
-        result.addItem(unmarshall(nestedObject, null, disconnected));
+        result.addItem(unmarshall(nestedObject, disconnected));
       }
       return result;
     }

@@ -132,8 +132,8 @@ package org.restfulx.services.http {
      * @inheritDoc
      * @see org.restfulx.services.IServiceProvider#unmarshall
      */
-    public function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
-      return serializer.unmarshall(object, target, disconnected);
+    public function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object {
+      return serializer.unmarshall(object, disconnected, defaultType, target);
     }
     
     /**
@@ -486,7 +486,7 @@ package org.restfulx.services.http {
               if (!toDelete) {
                 embedded.push(item);
               } else {
-                embedded.push({"id": item["id"], "delete": "1"});
+                embedded.push({"id": item["id"], "_delete": "1"});
               }
             }
             result[localName + "[" + property + "_attributes]"] = JSON.encode(embedded);
@@ -499,7 +499,7 @@ package org.restfulx.services.http {
             if (!toDelete) {
               result[localName + "[" + property + "_attributes]"] = JSON.encode(vo[property]);
             } else {
-              result[localName + "[" + property + "_attributes]"] = JSON.encode({"id": vo[property]["id"], "delete": "1"});
+              result[localName + "[" + property + "_attributes]"] = JSON.encode({"id": vo[property]["id"], "_delete": "1"});
             }
           }
         } else {
@@ -512,9 +512,9 @@ package org.restfulx.services.http {
     
     protected function addHeaders(service:HTTPService, headers:Object):void {
       if (service.headers == null) service.headers = {};
-    	for (var key:String in headers) {
-    		service.headers[key] = headers[key];
-    	}
+      for (var key:String in headers) {
+        service.headers[key] = headers[key];
+      }
     }
   }
 }

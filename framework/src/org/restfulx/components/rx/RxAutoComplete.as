@@ -30,7 +30,7 @@ package org.restfulx.components.rx {
   
   import mx.collections.ArrayCollection;
   import mx.controls.ComboBox;
-  
+    
   import org.restfulx.Rx;
   import org.restfulx.events.RxAutoCompleteItemEvent;
   import org.restfulx.models.RxModel;
@@ -98,11 +98,29 @@ package org.restfulx.components.rx {
      * which will use the current service provider. If you are unhappy with any part of standard
      * Rx index/reload processing, you can provide your own custom function here to do all
      * the processing
+     *  
+     * @example Example Custom Search Function that deals with online/offline custom queries
+     *  
+     * <listing version="3.0">
+     *    private function customSearchFunction(clazz:Class = null, serviceResponder:ServiceResponder = null,
+     *                 metadata:Object = null, nestedBy:Array = null):void {
+     *       if (online) {
+     *           trace("online search, pass through to the service provider");
+     *         Rx.services.getServiceProvider(XMLHTTPServiceProvider.ID).index(
+     *             clazz, serviceResponder, metadata, nestedBy);
+     *       } else {
+     *         trace("do custom offline search too");
+     *          XRx.air(function(results:Object):void { 
+     *             serviceResponder.result(new ResultEvent(ResultEvent.RESULT, false, false, results)); 
+     *           }).findAll(clazz, ["name like :name", {':name': "%foo%"}]);
+     *     }
+     *  }
+     * </listing>
      */
     public var customSearchFunction:Function;
     
     /** Indicates how long we should wait for before firing server request */
-    public var lookupDelay:int = 500;
+    public var lookupDelay:int = 1500;
     
     /** Minimum number of characters that must be provided before server request will be made */
     public var lookupMinChars:int = 1;
@@ -115,6 +133,9 @@ package org.restfulx.components.rx {
     
     /** Indicates if a Rx.models.show operation should be performed on enter */
     public var showOnEnter:Boolean = true;
+    
+    /** Always invoke show on the model independency of the currently shown status */
+    public var alwaysShow:Boolean = false;
 
     private var _resource:Class;
 
@@ -205,12 +226,14 @@ package org.restfulx.components.rx {
      * @param input text string to use
      */
     public function set typedText(input:String):void {
-      _typedText = input;
-      typedTextChanged = true;
+      if (_typedText != input) {
+        _typedText = input;
+        typedTextChanged = true;
       
-      invalidateProperties();
-      invalidateDisplayList();
-      dispatchEvent(new Event("typedTextChange"));
+        invalidateProperties();
+        invalidateDisplayList();
+        dispatchEvent(new Event("typedTextChange"));
+      }
     }
 
     [Bindable("chosenItemChange")]
@@ -270,6 +293,8 @@ package org.restfulx.components.rx {
 
       var data:ArrayCollection = ArrayCollection(dataProvider);
       data.refresh();
+      
+      if (typedText.length < lookupMinChars) return;
             
       if (data.length == 0) resourceSearched = false;
 
@@ -372,17 +397,18 @@ package org.restfulx.components.rx {
       super.updateDisplayList(unscaledWidth, unscaledHeight);
       
       if (!clearingText && selectedIndex == -1) {
-        textInput.text = typedText;
+        textInput.text = _typedText;
       }
       
       if (noResults) {
         // This is needed to control the open duration of the dropdown
-        textInput.text = typedText;
+        textInput.text = _typedText;
         typedTextChanged = false;
         super.open();
         showDropdown = false;
         showingDropdown = true;
         if (dropdownClosed) dropdownClosed = false;
+        textInput.setSelection(0, textInput.text.length);
       } else if (dropdown) {
         if (typedTextChanged) {
           //This is needed because a call to super.updateDisplayList() iset the text
@@ -393,7 +419,7 @@ package org.restfulx.components.rx {
         } else if (typedText) {
           //Sets the selection when user navigates the suggestion list through
           //arrows keys.
-  //        textInput.setSelection(_typedText.length, textInput.text.length);
+          textInput.setSelection(0, textInput.text.length);
         }
         
         if (clearingText) clearingText = false;
@@ -429,20 +455,36 @@ package org.restfulx.components.rx {
           dropdownClosed = true;
         } else if (event.keyCode == Keyboard.ENTER || event.keyCode == Keyboard.TAB) {
           if (selectedItem != null && selectedItem is RxModel) {
-            if (showOnEnter && !Rx.models.shown(selectedItem)) {
+            if (showOnEnter && !alwaysShow && !Rx.models.shown(selectedItem)) {
+              RxModel(selectedItem).show({onSuccess: onResourceShow, useLazyMode: true});
+            } else if (showOnEnter && alwaysShow) {
+              Rx.models.reset(selectedItem);
               RxModel(selectedItem).show({onSuccess: onResourceShow, useLazyMode: true});
             } else {
               selectedObject = selectedItem;
               itemShown = true;
               if (clearTextAfterFind) clearTypedText();
               dispatchEvent(new Event("chosenItemChange"));
+              event.stopPropagation();
             }
+          } else if (preselectedObject != null && preselectedObject is RxModel) {
+            selectedItem = preselectedObject;
+            selectedObject = selectedItem;
+            itemShown = true;
+            preselectedObject = null;
           } else {
             textInput.text = _typedText;
-            dispatchEvent(new RxAutoCompleteItemEvent(_typedText));
+            selectedObject = null;
+            preselectedObject = null;
+            itemShown = false;
+            if (textInput.text != "") {
+              dispatchEvent(new RxAutoCompleteItemEvent(_typedText));
+              event.stopPropagation();
+            }
           }
         } else if ((event.keyCode == Keyboard.UP || event.keyCode == Keyboard.DOWN) && showingDropdown) {
           dispatchEvent(new Event("itemHighlighted"));
+          event.stopPropagation();
         }
       } else if (event.ctrlKey && event.keyCode == Keyboard.UP) {
         dropdownClosed = true;

@@ -47,7 +47,7 @@ package org.restfulx.serializers {
     /**
      *  @inheritDoc
      */
-    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
+    public override function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object {
       if (object is TypedArray || object is RxModel) {
         return object;
       }

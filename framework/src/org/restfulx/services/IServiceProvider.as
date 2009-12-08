@@ -67,7 +67,7 @@ package org.restfulx.services {
     
     /**
      * Produces service provider specific model representation suitable for being serialized. For example,
-     * HTTPServiceProvider would return XML.
+     * XMLHTTPServiceProvider would return XML.
      *  
      * @param object object to marshall into serialized form
      * @param recursive flag indicating if entire object graph should be serialized inline
@@ -81,9 +81,11 @@ package org.restfulx.services {
      * @param object source object from the service provider/responder
      * @param target target object you want to parse your source into
      * @param disconnected a flag indicating that the object should not be reconnected with the cache
+     * @param defaultType default type to use if the type cannot be determined by the serializer
+     * @param target if you have an original class/object already created, upon response this will be used
      * @return (dis)connected object graph of the model corresponding to the response
      */
-    function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object;
+    function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object;
 
     /**
      * RESTful CRUD contract: index method. Same semantics as Rails RESTful controller index.
@@ -93,7 +95,7 @@ package org.restfulx.services {
      * @param metadata any metadata that must be appended with the index request
      * @param nestedBy an array of model instances that will be used to nest this request, e.g.:
      *  [project, user] where project is some Project model instance and user is some User model
-     *  instance. In case of HTTPServiceProvider nesting may require additional configuration on the server.
+     *  instance. In case of XMLHTTPServiceProvider nesting may require additional configuration on the server.
      *  If you are using Rails see config/routes.rb for more details.
      */
     function index(object:Object, responder:IResponder, metadata:Object = null, nestedBy:Array = null):void;
@@ -106,7 +108,7 @@ package org.restfulx.services {
      * @param metadata any metadata that must be appended with the index request
      * @param nestedBy an array of model instances that will be used to nest this request, e.g.:
      *  [project, user] where project is some Project model instance and user is some User model
-     *  instance. In case of HTTPServiceProvider nesting may require additional configuration on the server.
+     *  instance. In case of XMLHTTPServiceProvider nesting may require additional configuration on the server.
      *  If you are using Rails see config/routes.rb for more details.
      */    
     function show(object:Object, responder:IResponder, metadata:Object = null, nestedBy:Array = null):void;
@@ -119,7 +121,7 @@ package org.restfulx.services {
      * @param metadata any metadata that must be appended with the index request
      * @param nestedBy an array of model instances that will be used to nest this request, e.g.:
      *  [project, user] where project is some Project model instance and user is some User model
-     *  instance. In case of HTTPServiceProvider nesting may require additional configuration on the server.
+     *  instance. In case of XMLHTTPServiceProvider nesting may require additional configuration on the server.
      *  If you are using Rails see config/routes.rb for more details.
      * @param recursive indicates if recursive create (object + all children) should be performed
      * @param undoRedoFlag indicates if it's a normal invocation, undo invocation or redo invocation
@@ -135,7 +137,7 @@ package org.restfulx.services {
      * @param metadata any metadata that must be appended with the index request
      * @param nestedBy an array of model instances that will be used to nest this request, e.g.:
      *  [project, user] where project is some Project model instance and user is some User model
-     *  instance. In case of HTTPServiceProvider nesting may require additional configuration on the server.
+     *  instance. In case of XMLHTTPServiceProvider nesting may require additional configuration on the server.
      *  If you are using Rails see config/routes.rb for more details.
      * @param recursive indicates if recursive create (object + all children) should be performed
      * @param undoRedoFlag indicates if it's a normal invocation, undo invocation or redo invocation
@@ -151,7 +153,7 @@ package org.restfulx.services {
      * @param metadata any metadata that must be appended with the index request
      * @param nestedBy an array of model instances that will be used to nest this request, e.g.:
      *  [project, user] where project is some Project model instance and user is some User model
-     *  instance. In case of HTTPServiceProvider nesting may require additional configuration on the server.
+     *  instance. In case of XMLHTTPServiceProvider nesting may require additional configuration on the server.
      *  If you are using Rails see config/routes.rb for more details.
      * @param recursive indicates if recursive create (object + all children) should be performed
      * @param undoRedoFlag indicates if it's a normal invocation, undo invocation or redo invocation

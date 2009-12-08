@@ -71,11 +71,11 @@ package org.restfulx.serializers
      *   
      * @see org.restfulx.serializers.ISerializer#unmarshall
      */
-    public function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
+    public function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object {
       return object;
     }
 
-    protected function unmarshallObject(source:Object, target:Object = null, disconnected:Boolean = false, type:String = null):Object {
+    protected function unmarshallObject(source:Object, disconnected:Boolean = false, type:String = null, target:Object = null):Object {
       return source;
     }
 
@@ -213,7 +213,7 @@ package org.restfulx.serializers
         } else if (isNestedObject && !disconnected) {
           if (ObjectUtil.hasMetadata(object, targetName, "HasOne") ||
             ObjectUtil.hasMetadata(object, targetName, "BelongsTo")) {
-            var nestedRef:Object = unmarshallObject(attribute, disconnected, targetType);
+            var nestedRef:Object = unmarshallObject(attribute, disconnected, targetType, object);
             object[targetName] = nestedRef;
           }
         } else {
@@ -241,7 +241,12 @@ package org.restfulx.serializers
     protected function getPolymorphicRef(source:Object, name:String):String {
       var polyName:String = name + "_type";
       if (source.hasOwnProperty(polyName)) {
-        return source[polyName];
+        var result:String = source[polyName];
+        if (result == "NilClass") {
+          return "";
+        } else {
+          return result;
+        }
       } else {
         return "";
       }

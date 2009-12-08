@@ -145,8 +145,8 @@ package org.restfulx.services.air {
      * @inheritDoc
      * @see org.restfulx.services.IServiceProvider#unmarshall
      */
-    public function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
-      return Rx.serializers.vo.unmarshall(object, target, disconnected);
+    public function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object {
+      return Rx.serializers.vo.unmarshall(object, disconnected, defaultType, target);
     }
     
     /**
@@ -158,6 +158,14 @@ package org.restfulx.services.air {
       if (indexing[fqn]) return;
       
       var queryText:String = sql[fqn]["select"] + " AND ";
+      if (metadata != null && metadata.hasOwnProperty("search") && metadata.hasOwnProperty("category")) {
+        if (!RxUtils.isEmpty(metadata['search']) && !RxUtils.isEmpty(metadata['category'])) {
+          var category:String = metadata['category'];
+          metadata[category] = metadata["search"];
+          delete metadata['category'];
+          delete metadata['search'];
+        }
+      }
       for (var prop:String in metadata) {
         queryText += RxUtils.toSnakeCase(prop) + " LIKE '%" + metadata[prop] + "%' AND ";
       }

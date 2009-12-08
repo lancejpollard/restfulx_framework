@@ -49,7 +49,7 @@ package org.restfulx.serializers {
     /**
      *  @inheritDoc
      */
-    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {
+    public override function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object {
       if (object is TypedArray || object is RxModel) {
         return object;
       }
@@ -156,7 +156,7 @@ package org.restfulx.serializers {
       return new XML(result);
     }
     
-    protected override function unmarshallObject(source:Object, target:Object = null, disconnected:Boolean = false, type:String = null):Object {
+    protected override function unmarshallObject(source:Object, disconnected:Boolean = false, type:String = null, target:Object = null):Object {
       var node:XML = XML(source);
       var localName:String = RxUtils.toCamelCase(node.localName());
       var fqn:String = (!type) ? state.fqns[localName] : type;
