@@ -77,3 +77,7 @@ namespace :test do
     end
   end
 end
+
+
+#[alias]
+#	full_merge = !"git fetch origin -v; git fetch dima -v; git merge dima/master"

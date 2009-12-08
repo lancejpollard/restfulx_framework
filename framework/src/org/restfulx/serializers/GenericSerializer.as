@@ -21,7 +21,8 @@
  *
  * Redistributions of files must retain the above copyright notice.
  ******************************************************************************/
-package org.restfulx.serializers {
+package org.restfulx.serializers
+{
   import flash.utils.getDefinitionByName;
   
   import mx.utils.ObjectUtil;
