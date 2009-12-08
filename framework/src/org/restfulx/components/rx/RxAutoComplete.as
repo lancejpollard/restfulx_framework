@@ -30,7 +30,7 @@ package org.restfulx.components.rx {
   
   import mx.collections.ArrayCollection;
   import mx.controls.ComboBox;
-    
+  
   import org.restfulx.Rx;
   import org.restfulx.events.RxAutoCompleteItemEvent;
   import org.restfulx.models.RxModel;
@@ -399,7 +399,7 @@ package org.restfulx.components.rx {
       if (!clearingText && selectedIndex == -1) {
         textInput.text = _typedText;
       }
-      
+      var hack:String = "selectRange" in textInput ? "selectRange" : "setSelection";// flex 4 changes
       if (noResults) {
         // This is needed to control the open duration of the dropdown
         textInput.text = _typedText;
@@ -408,7 +408,7 @@ package org.restfulx.components.rx {
         showDropdown = false;
         showingDropdown = true;
         if (dropdownClosed) dropdownClosed = false;
-        textInput.setSelection(0, textInput.text.length);
+		textInput[hack](0, textInput.text.length);
       } else if (dropdown) {
         if (typedTextChanged) {
           //This is needed because a call to super.updateDisplayList() iset the text
@@ -419,7 +419,7 @@ package org.restfulx.components.rx {
         } else if (typedText) {
           //Sets the selection when user navigates the suggestion list through
           //arrows keys.
-          textInput.setSelection(0, textInput.text.length);
+  		  textInput[hack](0, textInput.text.length);
         }
         
         if (clearingText) clearingText = false;

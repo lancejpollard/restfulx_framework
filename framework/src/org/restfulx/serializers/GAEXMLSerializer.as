@@ -81,7 +81,7 @@ package org.restfulx.serializers {
       return object;
     }
 
-    protected override function unmarshallObject(source:Object, target:Object = null, disconnected:Boolean = false, type:String = null):Object {
+    protected override function unmarshallObject(source:Object, disconnected:Boolean = false, type:String = null, target:Object = null):Object {
       var node:XML = XML(source);
       var localName:String = RxUtils.lowerCaseFirst(node.@kind);
       if (RxUtils.isEmpty(localName)) return null;

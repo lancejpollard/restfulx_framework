@@ -82,13 +82,8 @@ package org.restfulx.services.http {
      * @inheritDoc
      * @see org.restfulx.services.IServiceProvider#unmarshall
      */
-<<<<<<< HEAD:framework/src/org/restfulx/services/http/JSONHTTPServiceProvider.as
-    public override function unmarshall(object:Object, target:Object = null, disconnected:Boolean = false):Object {      
-      return serializer.unmarshall(object, target, disconnected);
-=======
-    public override function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null):Object {      
-      return serializer.unmarshall(object, disconnected, defaultType);
->>>>>>> dima/master:framework/src/org/restfulx/services/http/JSONHTTPServiceProvider.as
+    public override function unmarshall(object:Object, disconnected:Boolean = false, defaultType:String = null, target:Object = null):Object {      
+      return serializer.unmarshall(object, disconnected, defaultType, target);
     }
 
     protected override function getHTTPService(object:Object, nestedBy:Array = null):HTTPService {
