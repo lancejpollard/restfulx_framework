@@ -308,7 +308,9 @@ package org.restfulx.controllers {
         throw new Error("Cannot show " + fqn + ". Make sure that you have referenced this model class in your ApplicationController.");
       }
       
-      var currentInstance:Object = cached.withId(objectId);
+      var currentInstance:Object;
+      if (objectId)
+        currentInstance = cached.withId(objectId);
       
       if (!shown.contains(objectId)) {
         if (fetchDependencies) {
@@ -337,9 +339,10 @@ package org.restfulx.controllers {
         }
         
         state.waiting[fqn] = true;
-        shown.addItem(objectId);
+        if (objectId)
+          shown.addItem(objectId);
         
-        if (!currentInstance) {
+        if (!currentInstance && objectId) {
           currentInstance = new (getDefinitionByName(fqn) as Class);
           currentInstance["id"] = objectId;
           cached.addItem(currentInstance);

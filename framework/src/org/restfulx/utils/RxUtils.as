@@ -610,5 +610,17 @@ package org.restfulx.utils {
       }
       return true;
     }
+
+	public static function getCachedFqn(models:*):String {
+	  var fqn:String;
+      if (models is TypedArray) {
+        var modelsArray:TypedArray = models as TypedArray;
+        fqn = modelsArray.itemType;
+        (Rx.models.cache.data[fqn] as ModelsCollection).metadata = modelsArray.metadata;
+      } else if (models is RxModel) {
+        fqn = getQualifiedClassName(models);
+      }
+		return fqn;
+	}
   }
 }

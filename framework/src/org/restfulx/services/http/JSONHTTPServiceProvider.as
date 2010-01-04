@@ -59,6 +59,8 @@ package org.restfulx.services.http {
      */
     public override function hasErrors(object:Object):Boolean {
       // TODO: what are we doing about the errors sent over in JSON?
+      if (object == "null")
+      	return true;
       return false;
     }
 

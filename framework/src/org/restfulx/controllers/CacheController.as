@@ -80,14 +80,7 @@ package org.restfulx.controllers {
      * @param models unmarshalled models
      */
     public function index(models:Object):void {
-      var fqn:String;
-      if (models is TypedArray) {
-        var modelsArray:TypedArray = models as TypedArray;
-        fqn = modelsArray.itemType;
-        (data[fqn] as ModelsCollection).metadata = modelsArray.metadata;
-      } else if (models is RxModel) {
-        fqn = getQualifiedClassName(models);
-      }
+      var fqn:String = RxUtils.getCachedFqn(models);
       if (fqn != null) Rx.models.dispatchEvent(new CacheUpdateEvent(fqn, CacheUpdateEvent.INDEX, data[fqn]));            
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actionScriptProperties mainApplicationPath="restfulx.as" version="3">
-<compiler additionalCompilerArguments="-locale en_US -source-path+=locale/{locale} -allow-source-path-overlap=true" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersion="9.0.28" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="src" strict="true" useApolloConfig="true" verifyDigests="true" warn="true">
+<compiler additionalCompilerArguments="-directory=true -output=rsl -omit-trace-statements=true -as3=true -strict=true -locale en_US -source-path+=locale/{locale} -allow-source-path-overlap=true" copyDependentFiles="false" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersion="9.0.28" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="src" strict="true" useApolloConfig="true" verifyDigests="true" warn="true">
 <compilerSourcePath/>
 <libraryPath defaultLinkType="1">
 <libraryPathEntry kind="4" path=""/>
